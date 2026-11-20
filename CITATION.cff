@@ -1,0 +1,35 @@
+cff-version: 1.2.0
+message: "If you use this work, please cite it as below."
+type: software
+title: "Financial Large Language Model: Semantic Permissions and Objective-Preserving Scaling"
+version: "V_202611"
+date-released: 2026-11-19
+abstract: "What should a financial language model be supervised to say, and what must stay fixed while its training scales? The article, its PDF, full derivations, the public 24M Trial and code that recomputes every figure."
+authors:
+  - family-names: Ouyang
+    given-names: "Letao (Theodore)"
+repository-code: "https://github.com/130U/RESEARCH-Financial-Large-Language-Model"
+url: "https://github.com/130U/RESEARCH-Financial-Large-Language-Model/blob/main/paper/paper.pdf"
+license: Apache-2.0
+keywords:
+  - "financial LLM"
+  - "financial NLP"
+  - "language model"
+  - "pretraining"
+  - "PyTorch"
+  - "targeted stance detection"
+references:
+  - type: software
+    title: "MiniMind"
+    authors:
+      - name: "jingyaogong"
+    repository-code: "https://github.com/jingyaogong/minimind"
+    commit: "f659b55761b754d306bd140573493a6543cafd7f"
+preferred-citation:
+  type: article
+  title: "Financial Large Language Model: Semantic Permissions and Objective-Preserving Scaling"
+  authors:
+    - family-names: Ouyang
+      given-names: "Letao (Theodore)"
+  year: 2026
+  url: "https://github.com/130U/RESEARCH-Financial-Large-Language-Model/blob/main/paper/paper.pdf"

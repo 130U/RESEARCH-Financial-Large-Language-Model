@@ -1,0 +1,23 @@
+[build-system]
+requires = ["setuptools>=69"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "finllm-130u"
+version = "1.0.0"
+description = "A financial language model trained from scratch: the 24M Trial, semantic permissions and the objective-preserving training contract"
+requires-python = ">=3.10"
+dependencies = ["torch>=2.5,<3", "numpy>=1.26,<3", "tokenizers>=0.21,<0.24", "scikit-learn>=1.5,<2"]
+
+[project.optional-dependencies]
+test = ["pytest>=8,<10"]
+
+[project.scripts]
+finllm = "finllm.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["src"]

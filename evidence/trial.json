@@ -1,0 +1,63 @@
+{
+ "what": "Measurements of the 24M Trial: a decoder trained from random initialization on a single Tesla T4, adapted to financial text, and supervised on target-conditioned headline stance.",
+ "model": {
+  "parameters": 24255744, "layers": 6, "hidden": 512, "ffn": 1664, "query_heads": 8, "kv_heads": 4,
+  "head_dim": 64, "vocab": 8192, "context": 512, "tied_embeddings": true
+ },
+ "hardware": {"gpu": "Tesla T4", "mixed_precision": true, "batch_size": 4, "gradient_accumulation": 8, "sequence_length": 512,
+              "peak_allocated_vram_bytes": 1141189120},
+ "tokenizer": {"kind": "byte-level BPE trained on the Trial's own corpus", "vocab": 8192},
+ "exclusion": {"task_texts_excluded_from_tokenizer_and_language_corpora": 10686,
+               "source": "every distinct headline of the SEntFiN 1.0 pool, sampled or not"},
+ "corpora": {
+  "general": "a prefix of one fixed English Wikipedia revision",
+  "financial": "FOMC minutes, 2011 to 2025, from the Board's official pages",
+  "seed": {"general_documents": 825, "financial_documents": 32},
+  "expansion": {
+   "general_train": {"documents": 26267, "tokens": 41499364},
+   "general_validation": {"documents": 1394, "tokens": 2235968},
+   "financial_train": {"documents": 84, "tokens": 972438},
+   "financial_validation": {"documents": 4, "tokens": 50999}
+  },
+  "domain_mix": {"tokens": 1215545, "financial_tokens": 972436, "general_tokens": 243109}
+ },
+ "language_training": [
+  {"stage": "seed", "updates": 300, "supervised_tokens": 4914941, "validation_loss": 5.541868772506714,
+   "validation_positions": 102400, "tokens_per_second": 3390.057913405314},
+  {"stage": "expansion", "updates": 1220, "supervised_tokens": 19988195, "validation_loss": 3.692865579128265,
+   "validation_positions": 102400, "tokens_per_second": 3221.3133185574093,
+   "seed_retention_loss_before": 4.40319363117218, "seed_retention_loss_after": 3.984176821708679,
+   "initialization": "seed weights only; new optimizer, schedule and data cursor"},
+  {"stage": "domain", "updates": 74, "supervised_tokens": 1211960, "validation_loss": 3.2375138715611396,
+   "validation_positions": 50998, "tokens_per_second": 3489.19296563571, "learning_rate": 0.0001,
+   "general_retention_loss_before": 3.984176821708679, "general_retention_loss_after": 4.05735098361969,
+   "initialization": "expansion weights only; new optimizer and schedule"}
+ ],
+ "review": {
+  "headlines_reviewed": 2000, "decisions_confirmed": 1993, "excluded": 114, "unresolved": 7,
+  "three_class_candidates": 1879, "by_class": {"bullish": 426, "bearish": 234, "neutral": 1219},
+  "task_pool_with_a_literal_target": 1008,
+  "split": {"train": 705, "development": 101, "calibration": 101, "test": 101},
+  "train_by_class": {"neutral": 491, "bullish": 140, "bearish": 74},
+  "calibration_split": {"temperature": 51, "threshold": 50}
+ },
+ "sft": {
+  "initial": {
+   "epochs": 2, "optimizer_updates": 45, "label_positions": 1410, "exposures_per_epoch": 705,
+   "development": {"support": {"bearish": 10, "neutral": 76, "bullish": 15},
+                   "predicted": {"bearish": 0, "neutral": 101, "bullish": 0},
+                   "correct": {"bearish": 0, "neutral": 76, "bullish": 0}},
+   "test": {"examples": 101, "correct": 59, "predicted_neutral": 101}
+  },
+  "balanced": {
+   "epochs": 3, "optimizer_updates": 139, "label_positions": 4419, "exposures_per_epoch": 1473,
+   "exposures_per_class_per_epoch": 491, "initialization": "domain weights; new optimizer",
+   "development": {"support": {"bearish": 10, "neutral": 76, "bullish": 15},
+                   "predicted": {"bearish": 11, "neutral": 66, "bullish": 24},
+                   "correct": {"bearish": 5, "neutral": 62, "bullish": 12}}
+  },
+  "baseline": {"model": "class-weighted logistic regression on word TF-IDF, unigrams and bigrams",
+               "development": {"accuracy": 0.7525, "macro_f1": 0.6087}}
+ },
+ "calibration": {"temperature": 1.50634, "review_threshold": 0.5738}
+}
